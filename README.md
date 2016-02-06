@@ -15,6 +15,7 @@
 <h5>Golden rule 2 – Search for duplicate kata</h5>
 <p>Don’t worry, you’re not on Stack Overflow so you won’t get actually crucified for posting a duplicate kata, but you may get mildly tarred and feathered. And certainly as the number of kata on the site increases, this rule will become ever more important. But what is and is not a duplicate?</p>
 <p>Duplications spring up naturally as authors try to use established concepts to test programming skill, for example sudoku or the Fibonacci sequence. And who can blame them? Imagine having coming up with a new game every time or defining your own sequence of numbers! The problem arises when the solution for one kata can be pretty much copy-pasted into another one, or lifted straight from a well-known textbook. Not much of a challenge anymore! This is why it's important to follow the second golden rule and at least added your own twist or angle if you're going to work with a well known concept.</p>
+<p>Finally, read through Section 2 of the conjured Codewars Codex http://bkaestner.github.io/codewars-rules/#writing-a-kata which talks about important conventions that I have left out here.</p>
 <h2>Step 2 – Draft description and name</h2>
 <p>So you’ve finally got an idea you want to run with. Well done you, that’s half the battle! I find a good step at this stage is to open up the new kata tab [screenshot] and to give your kata a provisional name and draft description. This has two benefits:</p>
 <ul>
@@ -43,35 +44,49 @@
 <h5>Golden rule 4 – Example tests</h5>
 <p>The general convention is that if a solution passes the example tests it should stand a good chance of passing the full testing suite. It might get picked off by the random tests or require a rethink because it runs too slowly and the full tests require optimisation but with your random tests you should be giving your users a very clear indication of what you’re looking for. Some kata have no example tests. Some kata have very few examples, then the full testing suit has totally unexpected demands. Don’t do this. It’s annoying. Write carefully edged example tests with helpful error messages that enable the user to build their function piece by piece.</p>
 <h2>Step 6 – Full testing suite</h2>
-<p>What are random test and why are they important? Describe briefly</p>
+<p>If the user's solution passes the full tests, they have completed the kata and get the honour for doing so. It is your responsibility to make sure they can only get this honour if they have completed the kata to your satisfaction.</p>
+<p>It's common practice to start the full test suite with the same edge case tests that you used in the example test, maybe adding a few more fixed tests. Group and name your tests using `Test.describe` and `Test.it`. Refer to section 4.1.1 of The conjured Codewars Codex http://bkaestner.github.io/codewars-rules/#group-your-tests or look at other people's kata if you're unsure how to do this.</p>
+<p>But as things stand, someone could hardcode a kata solution that passed all the tests because they can figure out what the test results should be. In order to stop people doing that, you're going to need to apply golden rule #5.</p>
 <h5>Golden rule 5 – Random tests</h5>
 <p>Now we're on to a part which can trip people up but is easy once you know what you're doing. Let's take it slow with some sub-steps:</p>
-<h3>Step 6a – The fixed test block</h3>
-<p>This isn't necessary but it is convention to preface the random tests with the fixed tests that you just prepared for the example test section by simply copy-pasting across. This is your fixed test block [screenshot]</p>
-<h3>Step 6b – The test solution</h3>
-<p>Now copy across your solution but change the function name to something like `testSolution`.[screenshot]</p>
-<h3>Step 6c – The test loop</h3>
-<p>You are going to call your random test multiple times. Write a loop that iterates 40 or 50 times. In this example I've used a for loop.[screenshot]</p>
-<h3>Step 6d – Generate random variables</h3>
+<h4>Step 6a – The test (correct) solution</h4>
+<p>Copy across your correct solution to just underneath the block of fixed tests but change the function name to something like `testSolution`.[screenshot]</p>
+<h4>Step 6b – Test description</h4>
+<p>Use `Test.describe` and `Test.it` to call this set of tests 'Random tests'[screenshot]</p>
+<h4>Step 6c – The test loop</h4>
+<p>You are going to call `Test.assertEquals` multiple times. Write a loop that iterates 40 or 50 times. In this example I've used a for loop.[screenshot]</p>
+<h4>Step 6d – Generate random variables</h4>
 <p>Now we need to use our heads because not just any old random variables will do. You need to generate random variables that emulate the variables that you would expect as arguments for that function. Take our `multiply` function that multiplies the argument by 2 if even and 3 if odd. The random variable is going to need to an integer of the tests are going to work. Or if the function takes multiple number arguments, think about what ranges the random numbers need to cover.</p>
-<p>If the function takes a string, you will need to generate a random string of an appropriate length, with appropriate characteristics. Does the string need to emulate sentence structure, with spaces, commas and fullstops? Do substrings such as a word that is being filtered or counted need to show up? How many times will they show up? Prepare for this part to take some time if the variables you need to generate have requirements like this.</p>
+<p>If the function takes a string, you will need to generate a random string of an appropriate length with appropriate characteristics. Does the string need to emulate sentence structure, with spaces, commas and fullstops? Do substrings such as a word that is being filtered or counted need to show up? How many times will they show up? This part can take some time if the variables you need to generate have requirements like this. Stuck?</p>
+<ul>
+	<li>Use the normal resources; Google, Stack Overflow etc.</li>
+	<li>Go into the translation section of a kata you have completed that uses tests similar to the ones you want to implement. See how they've done it.</li>
+</ul>
 <p>These variables are created inside the loop so that with each iteration we have a new set of random variables to run the tests with!</p>
-<h3>Step 6e – Test the solutions</h3>
-<p>Now we test the result from the user's solution against the result from your correct solution using the random variable(s) we just generated. ```Test.assertEquals(multiply(i), solution(i), “Should work for random tests!”)``` If the function that the user has defined is working properly, `Test.assertEquals` should evaluate userSolution(i) and yourSolution(i) as equal.</p>
+<h4>Step 6e – Test the solutions</h4>
+<p>Now we test the result from the user's solution against the result from your correct solution using the same random variable(s). ```Test.assertEquals(multiply(i), solution(i), “Should work for random tests!”)``` If the function that the user has defined is working properly, `Test.assertEquals` should evaluate userSolution(i) and yourSolution(i) as equal. If not, they get an error message back “Should work for random tests!”</p>
 <h2>Step 7 – Final description</h2>
-•	Reformat and check in preview box to make sure markup is coming through correctly.
-•	Go away and do something else then come back to re-read your description.
-•	Remember many people on the site have English as their first language.
+<p>Phew, we've done all the hard stuff! Now just need to add the polish. Revisit your description to make sure that it includes everything that the user will need to complete the kata. Have you kept it up to date with any changes that occured in the solution/test writing process? Does it follow sections 2.1 to 2.6 of the Conjured Codewars Codex? http://bkaestner.github.io/codewars-rules/#writing-a-kata Remember many people on the site don't have English as their first language. Try to make their lives as easy as possible. Now your description is perfect, time for golden rule #6</p>
 <h5>Golden rule 6 – Double-check your description</h5>
+<p>Check in the preview box to make sure the markdown is coming through correctly. Stand up, go away and do something else then come back to re-read your description. There's no spell or grammar check in the codewars editor so it's all down to you and your beady eyes!</p>
 <h2>Step 8 – Estimated rank and tags</h2> 
-•	Go to the kata page to see what tags fit your kata
+<p>Go to the page that lets you search for kata. Have a look down the left-hand side at the bottom to see what the common tags are. Add these tags to your kata.</p>
 <h2>Step 9 – Publish!</h2>
-Golden rules checklist
-•	Post in the gitter
-•	Use in the JS folder
+<p>Well done, you just wrote a kata! Give yourself a pat on the back! Now go through the golden rule checklist</p>
+<ul>
+	<li>#1 - Does you kata have an intersting twist?</li>
+	<li>#2 - Have you searched for duplicate kata?</li>
+	<li>#3 - Have you tested for edge cases?</li>
+	<li>#4 - Have you included example tests?</li>
+	<li>#5 - Does the full test suite include random tests?</li>
+	<li>#6 - Have you double-checked your description?</li>
+</ul>
+<p>If the answer to all of these is yes, hit publish! Go to your published kata and copy the link into one of the coding for everyone Gitters. The ones below seem to be the most most popular ones for publishing kata but just check first to see where people are active:<p>
+<ul>
+	<li>https://gitter.im/codingforeveryone</li>
+	<li>https://gitter.im/codingforeveryone/js</li>
+	<li>https://gitter.im/codingforeveryone/codewars</li>
+</ul>
 <h2>Step 10 – Stay involved</h2>
-•	Duty of stewardship. Especially in the first 24/48 hours. Where to find notifications.
-•	Check and approve translations
-•	Get a super user to approve.
-•	Check the authored kata tab
-•	Check the discourse needs resolution tab
+<p>That's you all done right? NOPE! It's highly likely that users will be able to make suggestions or point out errors. If you change the tests, you invalidate any solutions that would fail the new testing suite. This is why you have a duty of stewardship, especially in the first 24/48 hours. Log in to see if you have any notifications and try to address an issues quickly. Mark issues as resolved once you have dealt with them.</p>
+<p>Other users may post translations your kata. Follow this tutorial if you're unsure how to approve. https://github.com/Codewars/codewars.com/wiki/Tutorial:-Approving-translations Once the kata has received enough testing and ranking feeback, in the authored kata part of your profile, once a kata is marked as 'awaiting approval' all you need is a super-user (someone with really high honour) to approve it and that's it, you have a published kata.</p>
